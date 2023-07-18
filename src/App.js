@@ -37,6 +37,26 @@ function App() {
   useEffect(() => {
     verifyAuth();
   }, []);
+  const getPayload = () => {
+      return {
+          "data": [
+              {
+                  "request": {
+                      "requestId": "232",
+                      "userName": "abc",
+                      "fileType": "Passport"
+                  }
+              },
+              {
+                  "request": {
+                      "requestId": "343",
+                      "userName": "xyz",
+                      "fileType": "Driver's License"
+                  }
+              }
+          ]
+      }
+  }
   const verifyAuth = () => {
     Auth.currentAuthenticatedUser()
         .then((user) => {
@@ -63,6 +83,7 @@ function App() {
     setMessage(VERIFYEMAIL);
     Auth.signIn(email)
         .then((result) => {
+            console.log(result);
           setSession(result);
           setMessage(WAITINGFOROTP);
         })
@@ -80,9 +101,14 @@ function App() {
   const verifyOtp = () => {
     Auth.sendCustomChallengeAnswer(session, otp)
         .then((user) => {
-          setUser(user);
-          setMessage(SIGNEDIN);
-          setSession(null);
+            if (user.signInUserSession != null) {
+                setUser(user);
+                setMessage(SIGNEDIN);
+                setSession(null);
+            } else {
+                setMessage("Incorrect login details");
+            }
+
         })
         .catch((err) => {
           setMessage(err.message);
@@ -93,7 +119,6 @@ function App() {
   return (
       <div className='App'>
           <header className='App-header'>
-              <img src={logo} className='App-logo' alt='logo' />
               <p>{message}</p>
               {!user && !session && (
                 <div><InputGroup className='mb-3'>
@@ -124,16 +149,21 @@ function App() {
                       </InputGroup>
                   </div>
               )}
-              <div>
-                  <ButtonGroup>
-                      <Button variant='outline-primary' onClick={verifyAuth}>
-                          Am I sign in?
-                      </Button>
-                      <Button variant='outline-danger' onClick={signOut}>
-                          Sign Out
-                      </Button>
-                  </ButtonGroup>
-              </div>
+              {user && (
+                  <div>
+                    Should only appear if logged in
+                  </div>
+              )}
+              {/*<div>*/}
+              {/*    <ButtonGroup>*/}
+              {/*        <Button variant='outline-primary' onClick={verifyAuth}>*/}
+              {/*            Am I sign in?*/}
+              {/*        </Button>*/}
+              {/*        <Button variant='outline-danger' onClick={signOut}>*/}
+              {/*            Sign Out*/}
+              {/*        </Button>*/}
+              {/*    </ButtonGroup>*/}
+              {/*</div>*/}
           </header>
       </div>
   );
