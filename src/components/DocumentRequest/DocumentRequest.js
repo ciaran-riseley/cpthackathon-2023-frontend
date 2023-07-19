@@ -5,16 +5,34 @@ import {Storage} from "@aws-amplify/storage";
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
 
-const DocumentRequest = ({requestId, fileType, user}) => {
+const DocumentRequest = ({requestId, fileType}) => {
 
     const [state, setState] = useState({ imageFile: null, imageName: '' , response: ''});
 
+    const fulfilDataRequest = (state) => {
+        const requestOptions = {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json',
+                'Accept': 'application/json',
+               },
+            body: JSON.stringify({ 'requestId': requestId, "s3Link": requestId + "-" + fileType + ".jpeg" })
+        };
+        fetch('https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests', requestOptions)
+            .then(response => response.json())
+            .catch(error => console.log(error));
+    }
     const uploadFile = (state) => {
         Storage.put(requestId + "-" + fileType + ".jpeg", state.imageFile )
-            .then (result => console.log(result))
-            .catch(err => console.log(err));    }
+            .then (result =>  {
+                console.log(result);
+                fulfilDataRequest();
+            })
+            .catch(err => console.log(err));
 
-    return( <tr><td>{requestId}</td><td> {fileType}</td><td>{user}</td>
+    }
+
+    return( <tr><td>{requestId}</td><td> {fileType}</td>
             <td>
 <div class="flex">
 

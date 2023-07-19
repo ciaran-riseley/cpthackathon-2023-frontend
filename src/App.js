@@ -13,6 +13,7 @@ import { Storage } from '@aws-amplify/storage';
 import DocumentTable from './components/DocumentTable/DocumentTable.js';
 
 
+
 Amplify.configure({
   Auth: {
       identityPoolId: "us-west-2:07c62477-4f96-4438-86b9-30ebbea9a1fe",
@@ -42,8 +43,8 @@ function App() {
   const [session, setSession] = useState(null);
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
-  const [documentRequests, setDocumentRequests] = useState(null);
-  const password = Math.random().toString(10) + 'Abc#';
+  const [documentRequests, setDocumentRequests] = useState([]);
+
   useEffect(() => {
     verifyAuth();
     getPayload();
@@ -52,40 +53,6 @@ function App() {
   const getPayload = () => {
 
 
-      // setDocumentRequests( {
-      //     "data": [
-      //         {
-      //             "customerId": "siyuanhu123",
-      //             "customerFullName": "Siyuan Hu",
-      //             "documentRequests": [
-      //                 {
-      //                     "requestId": "232",
-      //                     "customerId": "siyuanhu123",
-      //                     "customerFullName": "Siyuan Hu",
-      //                     "fileType": "Passport"
-      //                 },
-      //                 {
-      //                     "requestId": "233",
-      //                     "customerId": "siyuanhu123",
-      //                     "customerFullName": "Siyuan Hu",
-      //                     "fileType": "Medicare Card"
-      //                 }
-      //             ]
-      //         },
-      //         {
-      //             "customerId": "tingtingc456",
-      //             "customerFullName": "Tingting Cao",
-      //             "documentRequests": [
-      //                 {
-      //                     "requestId": "234",
-      //                     "customerId": "tingtingc456",
-      //                     "customerFullName": "Tingting Cao",
-      //                     "fileType": "Driver Licence"
-      //                 }
-      //             ]
-      //         }
-      //     ]
-      // })
       fetch("https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests?email=siyuanhu@amaon.com",
           {
               method: "GET",
@@ -203,20 +170,11 @@ function App() {
                   </div>
               )}
               {user && (
-                 <DocumentTable documentPayload={documentRequests}/>
+                  documentRequests.map((req) => {
+                          return <DocumentTable customerID={req.customerId} customerFullName={req.customerFullName} documentRequests={req.documentRequests}/>})
 
 
               )}
-              {/*<div>*/}
-              {/*    <ButtonGroup>*/}
-              {/*        <Button variant='outline-primary' onClick={verifyAuth}>*/}
-              {/*            Am I sign in?*/}
-              {/*        </Button>*/}
-              {/*        <Button variant='outline-danger' onClick={signOut}>*/}
-              {/*            Sign Out*/}
-              {/*        </Button>*/}
-              {/*    </ButtonGroup>*/}
-              {/*</div>*/}
           </header>
       </div>
   );
