@@ -1,5 +1,4 @@
 import React, { useState, useEffect} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
@@ -11,17 +10,28 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Auth from '@aws-amplify/auth';
+import { Storage } from '@aws-amplify/storage';
+import DocumentTable from './components/DocumentTable/DocumentTable.js';
 
 
 Amplify.configure({
   Auth: {
+      identityPoolId: "us-west-2:07c62477-4f96-4438-86b9-30ebbea9a1fe",
     region: awsExports.REGION,
     userPoolId: awsExports.USER_POOL_ID,
     userPoolWebClientId: awsExports.USER_POOL_APP_CLIENT_ID
-  }
-})
+  },
+    Storage: {
+      bucket: "2023-cpt-hackathon-dropbear-rfi",
+        region: awsExports.REGION,
+        identityPoolId: "us-west-2:07c62477-4f96-4438-86b9-30ebbea9a1fe"
+    }
+});
 
-const NOTSIGNIN = 'You are NOT logged in';
+
+
+
+const NOTSIGNIN = 'Welcome to secure document upload';
 const SIGNEDIN = 'You have logged in successfully';
 const SIGNEDOUT = 'You have logged out successfully';
 const WAITINGFOROTP = 'Enter one-time password';
@@ -33,12 +43,16 @@ function App() {
   const [session, setSession] = useState(null);
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
+  const [documentRequests, setDocumentRequests] = useState(null);
   const password = Math.random().toString(10) + 'Abc#';
   useEffect(() => {
     verifyAuth();
+    getPayload();
   }, []);
   const getPayload = () => {
-      return {
+
+
+      setDocumentRequests( {
           "data": [
               {
                   "request": {
@@ -55,8 +69,13 @@ function App() {
                   }
               }
           ]
-      }
+      })
+      // fetch('https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests', {mode:'cors'})
+      //     .then(response => response.json())
+      //     .then(data => setDocumentRequests(data.total));
   }
+
+;
   const verifyAuth = () => {
     Auth.currentAuthenticatedUser()
         .then((user) => {
@@ -103,8 +122,9 @@ function App() {
         .then((user) => {
             if (user.signInUserSession != null) {
                 setUser(user);
-                setMessage(SIGNEDIN);
+                setMessage(SIGNEDIN + " " + user.username);
                 setSession(null);
+
             } else {
                 setMessage("Incorrect login details");
             }
@@ -150,9 +170,9 @@ function App() {
                   </div>
               )}
               {user && (
-                  <div>
-                    Should only appear if logged in
-                  </div>
+                 <DocumentTable documentPayload={documentRequests}/>
+
+
               )}
               {/*<div>*/}
               {/*    <ButtonGroup>*/}
