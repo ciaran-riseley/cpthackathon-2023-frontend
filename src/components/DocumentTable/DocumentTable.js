@@ -16,6 +16,7 @@ const DocumentTable = ({documentPayload}) => {
                 <th scope='col' >File type</th>
                 <th scope='col'>User</th>
                 <th scope='col' ></th>
+                <th scope='col' ></th>
             </tr>
                 </MDBTableHead>
             <MDBTableBody>

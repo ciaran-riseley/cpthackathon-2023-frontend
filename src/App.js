@@ -47,31 +47,65 @@ function App() {
   useEffect(() => {
     verifyAuth();
     getPayload();
+    console.log("Calling useEffect");
   }, []);
   const getPayload = () => {
 
 
-      setDocumentRequests( {
-          "data": [
-              {
-                  "request": {
-                      "requestId": "232",
-                      "userName": "abc",
-                      "fileType": "Passport"
-                  }
-              },
-              {
-                  "request": {
-                      "requestId": "343",
-                      "userName": "xyz",
-                      "fileType": "Driver's License"
-                  }
+      // setDocumentRequests( {
+      //     "data": [
+      //         {
+      //             "customerId": "siyuanhu123",
+      //             "customerFullName": "Siyuan Hu",
+      //             "documentRequests": [
+      //                 {
+      //                     "requestId": "232",
+      //                     "customerId": "siyuanhu123",
+      //                     "customerFullName": "Siyuan Hu",
+      //                     "fileType": "Passport"
+      //                 },
+      //                 {
+      //                     "requestId": "233",
+      //                     "customerId": "siyuanhu123",
+      //                     "customerFullName": "Siyuan Hu",
+      //                     "fileType": "Medicare Card"
+      //                 }
+      //             ]
+      //         },
+      //         {
+      //             "customerId": "tingtingc456",
+      //             "customerFullName": "Tingting Cao",
+      //             "documentRequests": [
+      //                 {
+      //                     "requestId": "234",
+      //                     "customerId": "tingtingc456",
+      //                     "customerFullName": "Tingting Cao",
+      //                     "fileType": "Driver Licence"
+      //                 }
+      //             ]
+      //         }
+      //     ]
+      // })
+      fetch("https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests?email=siyuanhu@amaon.com",
+          {
+              method: "GET",
+              mode:'cors',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+
               }
-          ]
-      })
-      // fetch('https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests', {mode:'cors'})
-      //     .then(response => response.json())
-      //     .then(data => setDocumentRequests(data.total));
+          }
+      )
+          .then(response => {
+              console.log(response);
+              return response.json();
+          })
+          .then(data => {
+              console.log(data);
+              setDocumentRequests(data);
+          })
+          .catch(error => console.log(error));
   }
 
 ;

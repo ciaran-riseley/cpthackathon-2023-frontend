@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './DocumentRequest.css';
 import {Storage} from "@aws-amplify/storage";
 import Button from 'react-bootstrap/Button';
+import Form from "react-bootstrap/Form";
 
 const DocumentRequest = ({requestId, fileType, user}) => {
 
@@ -15,10 +16,11 @@ const DocumentRequest = ({requestId, fileType, user}) => {
 
     return( <tr><td>{requestId}</td><td> {fileType}</td><td>{user}</td>
             <td>
+<div class="flex">
 
+                <Form.Group controlId="formFile" className="mb-3">
 
-            <input
-            type="file"
+                    <Form.Control   type="file"
             accept="image/jpeg"
             //ref={ref => (this.upload = ref)}
             onChange={e =>
@@ -28,9 +30,12 @@ const DocumentRequest = ({requestId, fileType, user}) => {
                 })
             }
         />
+                </Form.Group>
+</div></td>
+                <td><div>
             {/*<input value={state.imageName} placeholder="Select file" />*/}
-            <Button variant='outline-secondary' onClick={uploadFile}> Upload File </Button>
-
+            <Button classname="mb-3" variant="secondary"  onClick={uploadFile}> Upload File </Button>
+</div>
     </td></tr>
     );
 }
