@@ -146,12 +146,12 @@ function App() {
                         placeholder='Email address'
                         onChange={(event) => setEmail(event.target.value)}
                     />
-                    <InputGroup>
+
                         <Button variant='outline-secondary'
                                 onClick={signIn}>
                             Get OTP
                         </Button>
-                    </InputGroup>
+
                 </InputGroup></div>
               )}
               {!user && session && (
