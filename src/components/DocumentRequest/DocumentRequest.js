@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 
 const DocumentRequest = ({requestId, fileType}) => {
 
-    const [state, setState] = useState({ imageFile: null, imageName: '' , response: ''});
+    const [state, setState] = useState({ imageFile: null, imageName: '' , response: '', uploadButtonDisabled: true});
 
     const fulfilDataRequest = (state) => {
         const requestOptions = {
@@ -32,29 +32,31 @@ const DocumentRequest = ({requestId, fileType}) => {
 
     }
 
-    return( <tr><td>{requestId}</td><td> {fileType}</td>
-            <td>
-<div class="flex">
-
-                <Form.Group controlId="formFile" className="mb-3">
+    return( <tr><td className="cell">{requestId}</td><td className="cell"> {fileType}</td>
+            <td className="d-table-cell">
+                <div className="d-flex align-items-center">
+                    <Form.Group controlId="formFile" >
 
                     <Form.Control   type="file"
-            accept="image/jpeg"
-            //ref={ref => (this.upload = ref)}
-            onChange={e =>
-                setState({
-                    imageFile: e.target.files[0],
-                    imageName: e.target.files[0].name
-                })
-            }
-        />
-                </Form.Group>
-</div></td>
-                <td><div>
-            {/*<input value={state.imageName} placeholder="Select file" />*/}
-            <Button classname="mb-3" variant="secondary"  onClick={uploadFile}> Upload File </Button>
-</div>
-    </td></tr>
+                        accept="image/jpeg"
+                        //ref={ref => (this.upload = ref)}
+                        onChange={e =>
+                            setState({
+                                imageFile: e.target.files[0],
+                                imageName: e.target.files[0].name,
+                                uploadButtonDisabled: false
+                            })
+                        }
+                    />
+                    </Form.Group>
+                </div>
+            </td>
+            <td>
+                <div className="d-flex align-items-center  ">
+                    <Button variant="secondary"  onClick={uploadFile} disabled={state.uploadButtonDisabled}> Upload File </Button>
+                </div>
+            </td>
+        </tr>
     );
 }
 

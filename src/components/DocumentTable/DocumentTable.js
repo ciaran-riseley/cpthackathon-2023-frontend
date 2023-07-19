@@ -6,8 +6,8 @@ const DocumentTable = ({customerID, customerFullName, documentRequests}) => {
 
     return (
     <div>{customerID} {customerFullName}
-        <MDBTable align='middle'>
-            <MDBTableHead>
+        <MDBTable className="table align-middle mb-0 bg-white">
+            <MDBTableHead className="bg-light">
             <tr>
                 <th scope='col'>Request ID</th>
                 <th scope='col' >File type</th>
