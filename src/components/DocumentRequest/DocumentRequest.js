@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 import './DocumentRequest.css';
 import {Storage} from "@aws-amplify/storage";
+import Button from 'react-bootstrap/Button';
 
-const DocumentRequest = ({requestId, fileType}) => {
+const DocumentRequest = ({requestId, fileType, user}) => {
 
     const [state, setState] = useState({ imageFile: null, imageName: '' , response: ''});
 
@@ -12,13 +13,13 @@ const DocumentRequest = ({requestId, fileType}) => {
             .then (result => console.log(result))
             .catch(err => console.log(err));    }
 
-    return( <tr><td>{requestId}</td><td> {fileType}</td><td>
-            <div>
+    return( <tr><td>{requestId}</td><td> {fileType}</td><td>{user}</td>
+            <td>
+
 
             <input
             type="file"
             accept="image/jpeg"
-            //style={{ display: "none" }}
             //ref={ref => (this.upload = ref)}
             onChange={e =>
                 setState({
@@ -28,8 +29,8 @@ const DocumentRequest = ({requestId, fileType}) => {
             }
         />
             {/*<input value={state.imageName} placeholder="Select file" />*/}
-            <button onClick={uploadFile}> Upload File </button>
-            </div>
+            <Button variant='outline-secondary' onClick={uploadFile}> Upload File </Button>
+
     </td></tr>
     );
 }
