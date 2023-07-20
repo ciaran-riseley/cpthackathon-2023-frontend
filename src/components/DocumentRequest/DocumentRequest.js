@@ -5,7 +5,7 @@ import {Storage} from "@aws-amplify/storage";
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
 
-const DocumentRequest = ({requestId, fileType}) => {
+const DocumentRequest = ({requestId, fileType, idToken}) => {
 
     const [state, setState] = useState({ imageFile: null, imageName: '' , response: '', uploadButtonDisabled: true});
 
@@ -15,6 +15,7 @@ const DocumentRequest = ({requestId, fileType}) => {
             mode: 'cors',
             headers: { 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'Authorization': 'Bearer ' + idToken
                },
             body: JSON.stringify({ 'requestId': requestId, "s3Link": requestId + "-" + fileType + ".jpeg" })
         };

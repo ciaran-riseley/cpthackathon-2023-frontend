@@ -29,8 +29,6 @@ Amplify.configure({
 });
 
 
-
-
 const NOTSIGNIN = 'Welcome to secure document upload';
 const SIGNEDIN = 'You have logged in successfully';
 const SIGNEDOUT = 'You have logged out successfully';
@@ -179,6 +177,7 @@ function App() {
                               customerID={req.customerId}
                               customerFullName={req.customerFullName}
                               documentRequests={req.documentRequests}
+                              idToken={idToken}
                           />
                   }
                   )
