@@ -15,6 +15,7 @@ const DocumentTable = ({customerID, customerFullName, documentRequests, idToken}
                 <th scope='col' >File type</th>
                 <th scope='col' ></th>
                 <th scope='col' ></th>
+                <th scope='col' ></th>
             </tr>
                 </MDBTableHead>
             <MDBTableBody>

@@ -171,15 +171,21 @@ function App() {
                   </div>
               )}
               {user && (
+
                   documentRequests.map((req, key) => {
-                          return <DocumentTable
+                          return <div><DocumentTable
                               key={key}
                               customerID={req.customerId}
                               customerFullName={req.customerFullName}
                               documentRequests={req.documentRequests}
                               idToken={idToken}
                           />
+                              {/*<Button variant='outline-danger' onClick={signOut}>*/}
+                              {/*    Sign Out*/}
+                              {/*</Button>*/}
+                          </div>
                   }
+
                   )
               )}
           </header>
