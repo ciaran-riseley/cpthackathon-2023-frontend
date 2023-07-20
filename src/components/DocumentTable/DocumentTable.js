@@ -16,8 +16,8 @@ const DocumentTable = ({customerID, customerFullName, documentRequests}) => {
             </tr>
                 </MDBTableHead>
             <MDBTableBody>
-            {documentRequests.map((req) => (
-                <DocumentRequest requestId={req.requestId} fileType={req.fileType}/>))}
+            {documentRequests.map((req, key) => (
+                <DocumentRequest key={key} requestId={req.requestId} fileType={req.fileType}/>))}
             </MDBTableBody>
         </MDBTable>
 

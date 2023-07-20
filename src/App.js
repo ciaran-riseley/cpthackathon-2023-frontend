@@ -44,32 +44,31 @@ function App() {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const [documentRequests, setDocumentRequests] = useState([]);
+  const [idToken, setIdToken] = useState(null);
 
   useEffect(() => {
     verifyAuth();
+    console.log("ID token: " + idToken + " has changed");
     getPayload();
-    console.log("Calling useEffect");
-  }, []);
+  }, [idToken]);
   const getPayload = () => {
 
 
-      fetch("https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests?email=siyuanhu@amaon.com",
+      fetch("https://4y3ygmtxzc.execute-api.us-west-2.amazonaws.com/prod/rfirequests",
           {
               method: "GET",
               mode:'cors',
               headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
-
+                  'Authorization': 'Bearer ' + idToken
               }
           }
       )
           .then(response => {
-              console.log(response);
               return response.json();
           })
           .then(data => {
-              console.log(data);
               setDocumentRequests(data);
           })
           .catch(error => console.log(error));
@@ -98,11 +97,10 @@ function App() {
       setMessage(NOTSIGNIN);
     }
   };
-  const signIn = () => {
+  const signIn = (state) => {
     setMessage(VERIFYEMAIL);
     Auth.signIn(email)
         .then((result) => {
-            console.log(result);
           setSession(result);
           setMessage(WAITINGFOROTP);
         })
@@ -117,14 +115,19 @@ function App() {
         });
   };
 
-  const verifyOtp = () => {
+  const verifyOtp = (user) => {
     Auth.sendCustomChallengeAnswer(session, otp)
-        .then((user) => {
+        .then(user => {
+            console.log("User: " + JSON.stringify(user));
             if (user.signInUserSession != null) {
+                //console.log("Response from custom challenge: " + response)
                 setUser(user);
                 setMessage(SIGNEDIN + " " + user.username);
                 setSession(null);
-
+                console.log("user pool clientId: " +  user.pool.clientId );
+                let idTokenField = "CognitoIdentityServiceProvider." + user.pool.clientId + "." + user.username + ".idToken";
+                let idTokenValue = user['pool']['storage'][idTokenField];
+                setIdToken(idTokenValue);
             } else {
                 setMessage("Incorrect login details");
             }
@@ -170,10 +173,15 @@ function App() {
                   </div>
               )}
               {user && (
-                  documentRequests.map((req) => {
-                          return <DocumentTable customerID={req.customerId} customerFullName={req.customerFullName} documentRequests={req.documentRequests}/>})
-
-
+                  documentRequests.map((req, key) => {
+                          return <DocumentTable
+                              key={key}
+                              customerID={req.customerId}
+                              customerFullName={req.customerFullName}
+                              documentRequests={req.documentRequests}
+                          />
+                  }
+                  )
               )}
           </header>
       </div>
